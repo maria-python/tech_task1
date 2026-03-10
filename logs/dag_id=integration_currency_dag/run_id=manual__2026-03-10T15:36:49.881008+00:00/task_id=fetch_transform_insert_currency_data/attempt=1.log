@@ -1,0 +1,55 @@
+[2026-03-10T15:36:51.606+0000] {taskinstance.py:1159} INFO - Dependencies all met for dep_context=non-requeueable deps ti=<TaskInstance: integration_currency_dag.fetch_transform_insert_currency_data manual__2026-03-10T15:36:49.881008+00:00 [queued]>
+[2026-03-10T15:36:51.629+0000] {taskinstance.py:1159} INFO - Dependencies all met for dep_context=requeueable deps ti=<TaskInstance: integration_currency_dag.fetch_transform_insert_currency_data manual__2026-03-10T15:36:49.881008+00:00 [queued]>
+[2026-03-10T15:36:51.630+0000] {taskinstance.py:1361} INFO - Starting attempt 1 of 1
+[2026-03-10T15:36:51.650+0000] {taskinstance.py:1382} INFO - Executing <Task(PythonOperator): fetch_transform_insert_currency_data> on 2026-03-10 15:36:49.881008+00:00
+[2026-03-10T15:36:51.659+0000] {standard_task_runner.py:57} INFO - Started process 227 to run task
+[2026-03-10T15:36:51.666+0000] {standard_task_runner.py:84} INFO - Running: ['***', 'tasks', 'run', 'integration_currency_dag', 'fetch_transform_insert_currency_data', 'manual__2026-03-10T15:36:49.881008+00:00', '--job-id', '8', '--raw', '--subdir', 'DAGS_FOLDER/integration_dag.py', '--cfg-path', '/tmp/tmpvti5ibpy']
+[2026-03-10T15:36:51.675+0000] {standard_task_runner.py:85} INFO - Job 8: Subtask fetch_transform_insert_currency_data
+[2026-03-10T15:36:51.762+0000] {task_command.py:415} INFO - Running <TaskInstance: integration_currency_dag.fetch_transform_insert_currency_data manual__2026-03-10T15:36:49.881008+00:00 [running]> on host 717d9cc8a5a3
+[2026-03-10T15:36:52.101+0000] {taskinstance.py:1660} INFO - Exporting env vars: AIRFLOW_CTX_DAG_OWNER='***' AIRFLOW_CTX_DAG_ID='integration_currency_dag' AIRFLOW_CTX_TASK_ID='fetch_transform_insert_currency_data' AIRFLOW_CTX_EXECUTION_DATE='2026-03-10T15:36:49.881008+00:00' AIRFLOW_CTX_TRY_NUMBER='1' AIRFLOW_CTX_DAG_RUN_ID='manual__2026-03-10T15:36:49.881008+00:00'
+[2026-03-10T15:36:52.316+0000] {transform.py:110} ERROR - Error serializing column `date` into data type `Date`
+Traceback (most recent call last):
+  File "/home/airflow/.local/lib/python3.8/site-packages/clickhouse_connect/driver/transform.py", line 104, in chunk_gen
+    col_type.write_column(data, output, context)
+  File "/home/airflow/.local/lib/python3.8/site-packages/clickhouse_connect/datatypes/base.py", line 202, in write_column
+    self.write_column_data(column, dest, ctx)
+  File "/home/airflow/.local/lib/python3.8/site-packages/clickhouse_connect/datatypes/base.py", line 217, in write_column_data
+    self._write_column_binary(column, dest, ctx)
+  File "/home/airflow/.local/lib/python3.8/site-packages/clickhouse_connect/datatypes/temporal.py", line 47, in _write_column_binary
+    column = [(x - esd).days for x in column]
+  File "/home/airflow/.local/lib/python3.8/site-packages/clickhouse_connect/datatypes/temporal.py", line 47, in <listcomp>
+    column = [(x - esd).days for x in column]
+TypeError: unsupported operand type(s) for -: 'str' and 'datetime.date'
+[2026-03-10T15:36:52.319+0000] {taskinstance.py:1943} ERROR - Task failed with exception
+Traceback (most recent call last):
+  File "/home/airflow/.local/lib/python3.8/site-packages/airflow/operators/python.py", line 192, in execute
+    return_value = self.execute_callable()
+  File "/home/airflow/.local/lib/python3.8/site-packages/airflow/operators/python.py", line 209, in execute_callable
+    return self.python_callable(*self.op_args, **self.op_kwargs)
+  File "/opt/airflow/dags/integration_dag.py", line 17, in integration_task
+    insert_batch(transformed_data)
+  File "/opt/airflow/src/db/clickhouse_client.py", line 46, in insert_batch
+    client.insert(
+  File "/home/airflow/.local/lib/python3.8/site-packages/clickhouse_connect/driver/client.py", line 616, in insert
+    return self.data_insert(context)
+  File "/home/airflow/.local/lib/python3.8/site-packages/clickhouse_connect/driver/httpclient.py", line 260, in data_insert
+    response = self._raw_request(block_gen, params, headers, error_handler=error_handler, server_wait=False)
+  File "/home/airflow/.local/lib/python3.8/site-packages/clickhouse_connect/driver/httpclient.py", line 446, in _raw_request
+    error_handler(response)
+  File "/home/airflow/.local/lib/python3.8/site-packages/clickhouse_connect/driver/httpclient.py", line 245, in error_handler
+    raise ex
+  File "/home/airflow/.local/lib/python3.8/site-packages/clickhouse_connect/driver/transform.py", line 104, in chunk_gen
+    col_type.write_column(data, output, context)
+  File "/home/airflow/.local/lib/python3.8/site-packages/clickhouse_connect/datatypes/base.py", line 202, in write_column
+    self.write_column_data(column, dest, ctx)
+  File "/home/airflow/.local/lib/python3.8/site-packages/clickhouse_connect/datatypes/base.py", line 217, in write_column_data
+    self._write_column_binary(column, dest, ctx)
+  File "/home/airflow/.local/lib/python3.8/site-packages/clickhouse_connect/datatypes/temporal.py", line 47, in _write_column_binary
+    column = [(x - esd).days for x in column]
+  File "/home/airflow/.local/lib/python3.8/site-packages/clickhouse_connect/datatypes/temporal.py", line 47, in <listcomp>
+    column = [(x - esd).days for x in column]
+TypeError: unsupported operand type(s) for -: 'str' and 'datetime.date'
+[2026-03-10T15:36:52.334+0000] {taskinstance.py:1400} INFO - Marking task as FAILED. dag_id=integration_currency_dag, task_id=fetch_transform_insert_currency_data, execution_date=20260310T153649, start_date=20260310T153651, end_date=20260310T153652
+[2026-03-10T15:36:52.348+0000] {standard_task_runner.py:104} ERROR - Failed to execute job 8 for task fetch_transform_insert_currency_data (unsupported operand type(s) for -: 'str' and 'datetime.date'; 227)
+[2026-03-10T15:36:52.380+0000] {local_task_job_runner.py:228} INFO - Task exited with return code 1
+[2026-03-10T15:36:52.406+0000] {taskinstance.py:2784} INFO - 0 downstream tasks scheduled from follow-on schedule check

@@ -1,0 +1,62 @@
+[2026-03-10T14:57:19.114+0000] {taskinstance.py:1159} INFO - Dependencies all met for dep_context=non-requeueable deps ti=<TaskInstance: integration_currency_dag.fetch_transform_insert_currency_data manual__2026-03-10T14:57:17.330387+00:00 [queued]>
+[2026-03-10T14:57:19.131+0000] {taskinstance.py:1159} INFO - Dependencies all met for dep_context=requeueable deps ti=<TaskInstance: integration_currency_dag.fetch_transform_insert_currency_data manual__2026-03-10T14:57:17.330387+00:00 [queued]>
+[2026-03-10T14:57:19.132+0000] {taskinstance.py:1361} INFO - Starting attempt 1 of 1
+[2026-03-10T14:57:19.152+0000] {taskinstance.py:1382} INFO - Executing <Task(PythonOperator): fetch_transform_insert_currency_data> on 2026-03-10 14:57:17.330387+00:00
+[2026-03-10T14:57:19.186+0000] {standard_task_runner.py:57} INFO - Started process 248 to run task
+[2026-03-10T14:57:19.191+0000] {standard_task_runner.py:84} INFO - Running: ['***', 'tasks', 'run', 'integration_currency_dag', 'fetch_transform_insert_currency_data', 'manual__2026-03-10T14:57:17.330387+00:00', '--job-id', '13', '--raw', '--subdir', 'DAGS_FOLDER/integration_dag.py', '--cfg-path', '/tmp/tmpzd99tsjn']
+[2026-03-10T14:57:19.195+0000] {standard_task_runner.py:85} INFO - Job 13: Subtask fetch_transform_insert_currency_data
+[2026-03-10T14:57:19.285+0000] {task_command.py:415} INFO - Running <TaskInstance: integration_currency_dag.fetch_transform_insert_currency_data manual__2026-03-10T14:57:17.330387+00:00 [running]> on host a2a7dd082705
+[2026-03-10T14:57:19.655+0000] {taskinstance.py:1660} INFO - Exporting env vars: AIRFLOW_CTX_DAG_OWNER='***' AIRFLOW_CTX_DAG_ID='integration_currency_dag' AIRFLOW_CTX_TASK_ID='fetch_transform_insert_currency_data' AIRFLOW_CTX_EXECUTION_DATE='2026-03-10T14:57:17.330387+00:00' AIRFLOW_CTX_TRY_NUMBER='1' AIRFLOW_CTX_DAG_RUN_ID='manual__2026-03-10T14:57:17.330387+00:00'
+[2026-03-10T14:57:20.297+0000] {taskinstance.py:1943} ERROR - Task failed with exception
+Traceback (most recent call last):
+  File "/home/airflow/.local/lib/python3.8/site-packages/airflow/operators/python.py", line 192, in execute
+    return_value = self.execute_callable()
+  File "/home/airflow/.local/lib/python3.8/site-packages/airflow/operators/python.py", line 209, in execute_callable
+    return self.python_callable(*self.op_args, **self.op_kwargs)
+  File "/opt/airflow/dags/integration_dag.py", line 17, in integration_task
+    insert_batch(transformed_data)
+  File "/opt/airflow/src/db/clickhouse_client.py", line 32, in insert_batch
+    client = get_clickhouse_client()
+  File "/opt/airflow/src/db/clickhouse_client.py", line 12, in get_clickhouse_client
+    client = clickhouse_connect.get_client(
+  File "/home/airflow/.local/lib/python3.8/site-packages/clickhouse_connect/driver/__init__.py", line 112, in create_client
+    return HttpClient(interface, host, port, username, password, database, settings=settings, **kwargs)
+  File "/home/airflow/.local/lib/python3.8/site-packages/clickhouse_connect/driver/httpclient.py", line 147, in __init__
+    super().__init__(database=database,
+  File "/home/airflow/.local/lib/python3.8/site-packages/clickhouse_connect/driver/client.py", line 67, in __init__
+    tuple(self.command('SELECT version(), timezone()', use_database=False))
+  File "/home/airflow/.local/lib/python3.8/site-packages/clickhouse_connect/driver/httpclient.py", line 341, in command
+    response = self._raw_request(payload, params, headers, method, fields=fields)
+  File "/home/airflow/.local/lib/python3.8/site-packages/clickhouse_connect/driver/httpclient.py", line 448, in _raw_request
+    self._error_handler(response)
+  File "/home/airflow/.local/lib/python3.8/site-packages/clickhouse_connect/driver/httpclient.py", line 371, in _error_handler
+    raise OperationalError(err_str) if retried else DatabaseError(err_str) from None
+clickhouse_connect.driver.exceptions.DatabaseError: HTTPDriver for http://clickhouse:8123 returned response code 401)
+ Code: 194. DB::Exception: default: Authentication failed: password is incorrect, or there is no user with such name
+
+If you use ClickHouse Cloud, the password can be reset at https://clickhouse.cloud/
+on the settings page for the corresponding service.
+
+If you have installed ClickHouse and forgot password you can reset it in the configuration file.
+The password for default user is typically located at /etc/clickhouse-server/users.d/default-password.xml
+and deleting this file will reset the password.
+See also /etc/clickhouse-server/users.xml on the server where ClickHouse is installed.
+
+. (REQUIRED_PASSWORD)
+
+[2026-03-10T14:57:20.320+0000] {taskinstance.py:1400} INFO - Marking task as FAILED. dag_id=integration_currency_dag, task_id=fetch_transform_insert_currency_data, execution_date=20260310T145717, start_date=20260310T145719, end_date=20260310T145720
+[2026-03-10T14:57:20.343+0000] {standard_task_runner.py:104} ERROR - Failed to execute job 13 for task fetch_transform_insert_currency_data (HTTPDriver for http://clickhouse:8123 returned response code 401)
+ Code: 194. DB::Exception: default: Authentication failed: password is incorrect, or there is no user with such name
+
+If you use ClickHouse Cloud, the password can be reset at https://clickhouse.cloud/
+on the settings page for the corresponding service.
+
+If you have installed ClickHouse and forgot password you can reset it in the configuration file.
+The password for default user is typically located at /etc/clickhouse-server/users.d/default-password.xml
+and deleting this file will reset the password.
+See also /etc/clickhouse-server/users.xml on the server where ClickHouse is installed.
+
+. (REQUIRED_PASSWORD)
+; 248)
+[2026-03-10T14:57:20.394+0000] {local_task_job_runner.py:228} INFO - Task exited with return code 1
+[2026-03-10T14:57:20.435+0000] {taskinstance.py:2784} INFO - 0 downstream tasks scheduled from follow-on schedule check
